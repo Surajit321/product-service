@@ -1,10 +1,9 @@
 package com.productservice.ProductService.services;
 
-import com.productservice.ProductService.dtos.FakeStoreProductDto;
-import org.springframework.web.bind.annotation.PathVariable;
+import com.productservice.ProductService.dtos.GenericDto;
 
 public interface ProductService {
-    FakeStoreProductDto getProductById(long id);
+    GenericDto getProductById(long id);
     void getAllProducts();
     void updateProductById(long id);
     void deleteProductById(long id);
