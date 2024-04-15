@@ -31,6 +31,12 @@ public class ProductController {
         return this.productService.getAllProducts();
     }
 
+    @PostMapping
+    public FakeStoreProductDto createProduct(@RequestBody GenericDto genericDto)
+    {
+        return this.productService.createProduct(genericDto);
+    }
+
     @PutMapping("/{id}")
     public void updateProductById(@PathVariable("id") long id)
     {

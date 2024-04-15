@@ -2,9 +2,7 @@ package com.productservice.ProductService.services;
 
 import com.productservice.ProductService.dtos.FakeStoreProductDto;
 import com.productservice.ProductService.dtos.GenericDto;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.client.RestTemplateBuilder;
-import org.springframework.context.annotation.Primary;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -41,6 +39,14 @@ public class FakestoreProductServiceImpl implements ProductService{
             genericDto.add(setUpGenericDto(fakeStoreProductDto));
         }
         return genericDto;
+    }
+
+    @Override
+    public FakeStoreProductDto createProduct(GenericDto genericDto) {
+        RestTemplate restTemplate = restTemplateBuilder.build();
+        ResponseEntity<FakeStoreProductDto> responseEntity =
+                restTemplate.postForEntity(fakeStoreProductUrl, genericDto, FakeStoreProductDto.class);
+        return responseEntity.getBody();
     }
 
     @Override
