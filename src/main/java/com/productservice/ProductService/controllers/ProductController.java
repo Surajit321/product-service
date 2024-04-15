@@ -20,7 +20,7 @@ public class ProductController {
     @GetMapping("/{id}")
     public GenericDto getProductById(@PathVariable("id") long id)
     {
-        return this.productService.getProductById(1);
+        return this.productService.getProductById(id);
     }
 
     @GetMapping

@@ -14,7 +14,7 @@ import java.util.Objects;
 @Service
 public class FakestoreProductServiceImpl implements ProductService{
     private final RestTemplateBuilder restTemplateBuilder;
-    private static final String fakeStoreProductUrl = "https://fakestoreapi.com/products/1";
+    private static final String fakeStoreProductUrl = "https://fakestoreapi.com/products";
 
     FakestoreProductServiceImpl(RestTemplateBuilder restTemplateBuilder)
     {
@@ -23,7 +23,7 @@ public class FakestoreProductServiceImpl implements ProductService{
     @Override
     public GenericDto getProductById(long id) {
         RestTemplate restTemplate = restTemplateBuilder.build();
-        ResponseEntity<FakeStoreProductDto> responseEntity = restTemplate.getForEntity(fakeStoreProductUrl, FakeStoreProductDto.class);
+        ResponseEntity<FakeStoreProductDto> responseEntity = restTemplate.getForEntity(fakeStoreProductUrl + "/" + id, FakeStoreProductDto.class);
         return setUpGenericDto(Objects.requireNonNull(responseEntity.getBody()));
     }
 
