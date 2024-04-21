@@ -1,9 +1,8 @@
 package com.productservice.ProductService.controllers;
 
-import com.productservice.ProductService.dtos.FakeStoreProductDto;
 import com.productservice.ProductService.dtos.GenericDto;
+import com.productservice.ProductService.exceptions.ProductNotFoundException;
 import com.productservice.ProductService.services.ProductService;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -20,8 +19,7 @@ public class ProductController {
     }
 
     @GetMapping("/{id}")
-    public GenericDto getProductById(@PathVariable("id") long id)
-    {
+    public GenericDto getProductById(@PathVariable("id") long id) throws ProductNotFoundException {
         return this.productService.getProductById(id);
     }
 
@@ -32,20 +30,21 @@ public class ProductController {
     }
 
     @PostMapping
-    public FakeStoreProductDto createProduct(@RequestBody GenericDto genericDto)
+    public GenericDto createProduct(@RequestBody GenericDto genericDto)
     {
         return this.productService.createProduct(genericDto);
     }
 
     @PutMapping("/{id}")
-    public void updateProductById(@PathVariable("id") long id)
+    public GenericDto updateProductById(@PathVariable("id") long id, @RequestBody GenericDto genericDto)
     {
-
+return this.productService.updateProductById(id, genericDto);
     }
 
     @DeleteMapping("/{id}")
-    public void deleteProductById(@PathVariable("id") long id)
+    public GenericDto deleteProductById(@PathVariable("id") long id)
     {
-
+    return this.productService.deleteProductById(id);
     }
+
 }
