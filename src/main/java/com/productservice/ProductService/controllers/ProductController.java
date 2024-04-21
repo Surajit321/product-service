@@ -13,8 +13,7 @@ public class ProductController {
 
     private final ProductService productService;
 
-    ProductController(ProductService productService)
-    {
+    ProductController(ProductService productService) {
         this.productService = productService;
     }
 
@@ -24,27 +23,23 @@ public class ProductController {
     }
 
     @GetMapping
-    public List<GenericDto> getAllProducts()
-    {
+    public List<GenericDto> getAllProducts() {
         return this.productService.getAllProducts();
     }
 
     @PostMapping
-    public GenericDto createProduct(@RequestBody GenericDto genericDto)
-    {
+    public GenericDto createProduct(@RequestBody GenericDto genericDto) {
         return this.productService.createProduct(genericDto);
     }
 
     @PutMapping("/{id}")
-    public GenericDto updateProductById(@PathVariable("id") long id, @RequestBody GenericDto genericDto)
-    {
-return this.productService.updateProductById(id, genericDto);
+    public GenericDto updateProductById(@PathVariable("id") long id, @RequestBody GenericDto genericDto) {
+        return this.productService.updateProductById(id, genericDto);
     }
 
     @DeleteMapping("/{id}")
-    public GenericDto deleteProductById(@PathVariable("id") long id)
-    {
-    return this.productService.deleteProductById(id);
+    public GenericDto deleteProductById(@PathVariable("id") long id) {
+        return this.productService.deleteProductById(id);
     }
 
 }
