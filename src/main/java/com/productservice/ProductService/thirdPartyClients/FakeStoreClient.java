@@ -3,6 +3,7 @@ package com.productservice.ProductService.thirdPartyClients;
 import com.productservice.ProductService.dtos.FakeStoreProductDto;
 import com.productservice.ProductService.dtos.GenericDto;
 import com.productservice.ProductService.exceptions.ProductNotFoundException;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
@@ -11,22 +12,21 @@ import org.springframework.web.client.RequestCallback;
 import org.springframework.web.client.ResponseExtractor;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
 @Component
 public class FakeStoreClient {
     private final RestTemplateBuilder restTemplateBuilder;
-    private static final String fakeStoreProductUrl = "https://fakestoreapi.com/products";
+    private String fakeStoreProductUrl;
 
-    FakeStoreClient(RestTemplateBuilder restTemplateBuilder) {
+    FakeStoreClient(RestTemplateBuilder restTemplateBuilder, @Value("${fakeStore.api.product.baseUrl}") String fakeStoreProductUrl) {
         this.restTemplateBuilder = restTemplateBuilder;
+        this.fakeStoreProductUrl = fakeStoreProductUrl;
     }
 
     public FakeStoreProductDto getProductById(long id) throws ProductNotFoundException {
         RestTemplate restTemplate = restTemplateBuilder.build();
-        ResponseEntity<FakeStoreProductDto> responseEntity = restTemplate.getForEntity(fakeStoreProductUrl + "/" + id, FakeStoreProductDto.class);
+        ResponseEntity<FakeStoreProductDto> responseEntity = restTemplate.getForEntity(this.fakeStoreProductUrl + "/" + id, FakeStoreProductDto.class);
 
         if (responseEntity.getBody() == null) {
             throw new ProductNotFoundException("Product with id " + id + " does not exist.");
@@ -37,7 +37,7 @@ public class FakeStoreClient {
     public FakeStoreProductDto[] getAllProducts() {
         RestTemplate restTemplate = restTemplateBuilder.build();
         ResponseEntity<FakeStoreProductDto[]> responseEntity =
-                restTemplate.getForEntity(fakeStoreProductUrl, FakeStoreProductDto[].class);
+                restTemplate.getForEntity(this.fakeStoreProductUrl, FakeStoreProductDto[].class);
         FakeStoreProductDto[] fakeStoreProducts = responseEntity.getBody();
         return fakeStoreProducts;
     }
@@ -45,7 +45,7 @@ public class FakeStoreClient {
     public FakeStoreProductDto createProduct(GenericDto genericDto) {
         RestTemplate restTemplate = restTemplateBuilder.build();
         ResponseEntity<FakeStoreProductDto> responseEntity =
-                restTemplate.postForEntity(fakeStoreProductUrl, genericDto, FakeStoreProductDto.class);
+                restTemplate.postForEntity(this.fakeStoreProductUrl, genericDto, FakeStoreProductDto.class);
         return responseEntity.getBody();
     }
 
@@ -54,7 +54,7 @@ public class FakeStoreClient {
         RequestCallback requestCallback = restTemplate.acceptHeaderRequestCallback(FakeStoreProductDto.class);
         ResponseExtractor<ResponseEntity<FakeStoreProductDto>> responseExtractor = restTemplate.responseEntityExtractor(FakeStoreProductDto.class);
         ResponseEntity<FakeStoreProductDto> responseEntity =
-                restTemplate.execute(fakeStoreProductUrl + "/" + id, HttpMethod.PUT, requestCallback, responseExtractor, id, genericDto);
+                restTemplate.execute(this.fakeStoreProductUrl + "/" + id, HttpMethod.PUT, requestCallback, responseExtractor, id, genericDto);
         return responseEntity.getBody();
     }
 
@@ -63,7 +63,7 @@ public class FakeStoreClient {
         RequestCallback requestCallback = restTemplate.acceptHeaderRequestCallback(FakeStoreProductDto.class);
         ResponseExtractor<ResponseEntity<FakeStoreProductDto>> responseExtractor = restTemplate.responseEntityExtractor(FakeStoreProductDto.class);
         ResponseEntity<FakeStoreProductDto> responseEntity =
-                restTemplate.execute(fakeStoreProductUrl + "/" + id, HttpMethod.GET, requestCallback, responseExtractor, id);
+                restTemplate.execute(this.fakeStoreProductUrl + "/" + id, HttpMethod.DELETE, requestCallback, responseExtractor, id);
         return responseEntity.getBody();
     }
 }
