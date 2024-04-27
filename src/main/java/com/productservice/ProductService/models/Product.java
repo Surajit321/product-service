@@ -1,7 +1,9 @@
 package com.productservice.ProductService.models;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -10,9 +12,16 @@ import lombok.Setter;
 @Entity
 public class Product extends Base {
     private String title;
-    private int price;
-    @ManyToOne
+
+    @OneToOne(cascade = {jakarta.persistence.CascadeType.REMOVE, jakarta.persistence.CascadeType.PERSIST}, optional = false)
+    @JoinColumn(nullable = false, unique = true)
+    private Price price;
+
+    @ManyToOne(optional = false)
+    @JoinColumn(nullable = false)
     private Category category;
+
     private String description;
+
     private String imageUrl;
 }
