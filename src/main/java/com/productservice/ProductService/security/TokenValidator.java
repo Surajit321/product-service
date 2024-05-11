@@ -2,10 +2,12 @@ package com.productservice.ProductService.security;
 
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.Optional;
 
+@Service
 public class TokenValidator {
 
     private RestTemplateBuilder restTemplateBuilder;
