@@ -3,6 +3,8 @@ package com.productservice.ProductService.services;
 import com.productservice.ProductService.dtos.FakeStoreProductDto;
 import com.productservice.ProductService.dtos.GenericDto;
 import com.productservice.ProductService.exceptions.ProductNotFoundException;
+import com.productservice.ProductService.security.JWTObject;
+import com.productservice.ProductService.security.TokenValidator;
 import com.productservice.ProductService.thirdPartyClients.FakeStoreClient;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.HttpMethod;
@@ -15,17 +17,24 @@ import org.springframework.web.client.RestTemplate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 @Service
 public class FakestoreProductServiceImpl implements ProductService {
     private FakeStoreClient fakeStoreClient;
+    private TokenValidator tokenValidator;
 
-    public FakestoreProductServiceImpl(FakeStoreClient fakeStoreClient) {
+    public FakestoreProductServiceImpl(FakeStoreClient fakeStoreClient, TokenValidator tokenValidator) {
         this.fakeStoreClient = fakeStoreClient;
+        this.tokenValidator = tokenValidator;
     }
 
     @Override
-    public GenericDto getProductById(long id) throws ProductNotFoundException {
+    public GenericDto getProductById(String authToken, long id) throws ProductNotFoundException {
+        Optional<JWTObject> jwtObject = tokenValidator.validateToken(authToken, id);
+        if (jwtObject.isEmpty()) {
+            return null;
+        }
         return setUpGenericDto(this.fakeStoreClient.getProductById(id));
     }
 
