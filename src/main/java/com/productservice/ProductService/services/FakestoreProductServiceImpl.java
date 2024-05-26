@@ -31,10 +31,10 @@ public class FakestoreProductServiceImpl implements ProductService {
 
     @Override
     public GenericDto getProductById(String authToken, long id) throws ProductNotFoundException {
-        Optional<JWTObject> jwtObject = tokenValidator.validateToken(authToken, id);
-        if (jwtObject.isEmpty()) {
-            return null;
-        }
+//        Optional<JWTObject> jwtObject = tokenValidator.validateToken(authToken, id);
+//        if (jwtObject.isEmpty()) {
+//            return null;
+//        }
         return setUpGenericDto(this.fakeStoreClient.getProductById(id));
     }
 

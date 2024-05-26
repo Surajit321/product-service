@@ -1,5 +1,6 @@
 package com.productservice.ProductService.models;
 
+import com.productservice.ProductService.dtos.GenericDto;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
@@ -24,4 +25,13 @@ public class Product extends Base {
     private String description;
 
     private String imageUrl;
+
+
+    public GenericDto from(Product product){
+        GenericDto genericDto = new GenericDto();
+        genericDto.setTitle(product.getTitle());
+        genericDto.setImageUrl(product.getImageUrl());
+        genericDto.setDescription(product.getDescription());
+        return genericDto;
+    }
 }
