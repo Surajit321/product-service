@@ -1,5 +1,6 @@
 package com.productservice.ProductService.services;
 
+import com.productservice.ProductService.Repository.OpenSearchProductRepository;
 import com.productservice.ProductService.Repository.ProductRepository;
 import com.productservice.ProductService.dtos.GenericDto;
 import com.productservice.ProductService.models.Product;
@@ -15,9 +16,11 @@ import java.util.List;
 public class SearchService {
 
     private ProductRepository productRepository;
+    private OpenSearchProductRepository openSearchProductRepository;
 
-    public SearchService(ProductRepository productRepository) {
+    public SearchService(ProductRepository productRepository, OpenSearchProductRepository openSearchProductRepository) {
         this.productRepository = productRepository;
+        this.openSearchProductRepository = openSearchProductRepository;
     }
 
     public List<GenericDto> searchProducts(String query, int pageNumber, int pageSize, List<SortParams> sortParams) {
@@ -38,7 +41,7 @@ public class SearchService {
 
         PageRequest pageRequest = PageRequest.of(pageNumber, pageSize, sort);
 
-        List<Product> products = productRepository.findAllByTitleContaining(query, pageRequest);
+        List<Product> products = openSearchProductRepository.findAllByTitleContaining(query, pageRequest);
         List<GenericDto> genericDtoList = new ArrayList<>();
         for (Product product : products) {
             genericDtoList.add(product.from(product));
