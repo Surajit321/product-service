@@ -1,6 +1,6 @@
 package com.productservice.ProductService.services;
 
-import com.productservice.ProductService.Repository.OpenSearchProductRepository;
+//import com.productservice.ProductService.Repository.OpenSearchProductRepository;
 import com.productservice.ProductService.Repository.ProductRepository;
 import com.productservice.ProductService.dtos.GenericDto;
 import com.productservice.ProductService.exceptions.ProductNotFoundException;
@@ -11,16 +11,16 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-@Primary
 public class SelfProductServiceImplementation implements ProductService{
 
     private ProductRepository productRepository;
-    private OpenSearchProductRepository openSearchProductRepository;
+//    private OpenSearchProductRepository openSearchProductRepository;
 
-    public SelfProductServiceImplementation(ProductRepository productRepository,
-                                            OpenSearchProductRepository openSearchProductRepository){
+    public SelfProductServiceImplementation(ProductRepository productRepository
+//                                            OpenSearchProductRepository openSearchProductRepository
+    ){
         this.productRepository=productRepository;
-        this.openSearchProductRepository=openSearchProductRepository;
+//        this.openSearchProductRepository=openSearchProductRepository;
     }
     @Override
     public GenericDto getProductById(String authToken, long id) throws ProductNotFoundException {

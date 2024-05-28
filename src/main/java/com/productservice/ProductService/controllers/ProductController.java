@@ -19,7 +19,7 @@ public class ProductController {
     }
 
     @GetMapping("/{id}")
-    public GenericDto getProductById(@RequestHeader(HttpHeaders.AUTHORIZATION) String authToken, @PathVariable("id") long id) throws ProductNotFoundException {
+    public GenericDto getProductById(@RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String authToken, @PathVariable("id") long id) throws ProductNotFoundException {
         return this.productService.getProductById(authToken, id);
     }
 

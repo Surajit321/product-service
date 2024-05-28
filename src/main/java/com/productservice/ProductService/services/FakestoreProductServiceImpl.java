@@ -7,6 +7,8 @@ import com.productservice.ProductService.security.JWTObject;
 import com.productservice.ProductService.security.TokenValidator;
 import com.productservice.ProductService.thirdPartyClients.FakeStoreClient;
 import org.springframework.boot.web.client.RestTemplateBuilder;
+import org.springframework.context.annotation.Primary;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -20,13 +22,19 @@ import java.util.Objects;
 import java.util.Optional;
 
 @Service
+@Primary
 public class FakestoreProductServiceImpl implements ProductService {
     private FakeStoreClient fakeStoreClient;
     private TokenValidator tokenValidator;
+    private RedisTemplate<String, Object>  redisTemplate;
+    private FakeStoreProductDto fakeStoreProductDto;
 
-    public FakestoreProductServiceImpl(FakeStoreClient fakeStoreClient, TokenValidator tokenValidator) {
+    public FakestoreProductServiceImpl(FakeStoreClient fakeStoreClient,
+                                       TokenValidator tokenValidator,
+                                       RedisTemplate<String, Object> redisTemplate) {
         this.fakeStoreClient = fakeStoreClient;
         this.tokenValidator = tokenValidator;
+        this.redisTemplate = redisTemplate;
     }
 
     @Override
@@ -35,7 +43,13 @@ public class FakestoreProductServiceImpl implements ProductService {
 //        if (jwtObject.isEmpty()) {
 //            return null;
 //        }
-        return setUpGenericDto(this.fakeStoreClient.getProductById(id));
+        FakeStoreProductDto fakeStoreProductDto1 = (FakeStoreProductDto)redisTemplate.opsForHash().get("PRODUCTS", id);
+        if(fakeStoreProductDto1 != null){
+            return setUpGenericDto(fakeStoreProductDto1);
+        }
+        FakeStoreProductDto fakeStoreProductDto2 = this.fakeStoreClient.getProductById(id);
+        redisTemplate.opsForHash().put("PRODUCTS", id, fakeStoreProductDto2);
+        return setUpGenericDto(fakeStoreProductDto2);
     }
 
     @Override
